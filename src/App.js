@@ -2,8 +2,19 @@ import React, { Component } from 'react';
 
 class App extends Component {
 
-  render() {
+  linearArray(array, value) {
+    for (let i = 0; i < array.length; i++) {
+      if (array[i] === value) {
+        console.log('This is a valid value');
+        return i;
+      }
+    }
 
+    alert('Please Enter A Valid Number!');
+    return -1;
+  }
+
+  onSubmit(e) {
     let arr = [
       89,
       30,
@@ -14,58 +25,58 @@ class App extends Component {
       51,
       42,
     ];
+    e.preventDefault();
+    let lin = parseInt(this.input.value, 10);
+    this.linearArray(arr, lin);
+    this.input.value = '';
+  };
 
-    //Linear Search
-
-    function linearArray(array, value) {
-      for (let i = 0; i < array.length; i++) {
-        if (array[i] === value) {
-          return i;
-        }
-      }
-
+  binarySearch(array, value, start = 0, end = array.length) {
+    let sortArray = array.sort();
+    if (start > end)
       return -1;
+    let index = Math.floor((start + end) / 2);
+    let item = sortArray[index];
+    if (item === value) {
+      console.log('your value is at index: ', index);
+      return index;
+    } else if (item < value) {
+      return this.binarySearch(sortArray, value, index + 1, end);
+    } else if (item > value) {
+      return this.binarySearch(sortArray, value, start, index - 1);
     }
+  };
 
-    console.log(linearArray(arr, 70));
+  onSubmit2(e) {
+    let arr = [
+      89,
+      30,
+      25,
+      32,
+      72,
+      70,
+      51,
+      42,
+    ];
+    e.preventDefault();
+    let bin = parseInt(this.input.value, 10);
+    this.binarySearch(arr, bin);
+    this.input.value = '';
+  };
 
-    //Binary Search
-
-    function binarySearch(array, value, start = 0, end = array.length) {
-      let sortArray = array.sort();
-      if (start > end)
-        return -1;
-      let index = Math.floor((start + end) / 2);
-      let item = sortArray[index];
-      if (item === value) {
-        return index;
-      } else if (item < value) {
-        return binarySearch(sortArray, value, index + 1, end);
-      } else if (item > value) {
-        return binarySearch(sortArray, value, start, index - 1);
-      }
-    };
-
-    console.log(binarySearch(arr, 89));
+  render() {
 
     return (<div>
       <div>
-        <form className="linear">
-          <p>Linear Search:
-          </p>
-          <input type="input"></input>
-          <button type="submit">Submit</button>
+        <form>
+          <input ref={input => this.input = input} type="text"></input>
+          <br/> Linear Search:
+          <button type="submit" onClick={e => this.onSubmit(e)}>Submit</button>
+          <br/> Binary Search:
+          <button type="submit" onClick={e => this.onSubmit2(e)}>Submit</button>
         </form>
       </div>
 
-      <div>
-        <form className="binary">
-          <p>Binary Search:
-          </p>
-          <input type="input"></input>
-          <button type="submit">Submit</button>
-        </form>
-      </div>
     </div>);
   }
 }
